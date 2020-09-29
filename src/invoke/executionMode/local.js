@@ -1,4 +1,4 @@
-const { getAccountId } = require('../helper/sts');
+const { getAccountId } = require('../../helper/sts');
 
 module.exports = async (selectedFunction, data) => {
   const handlerPath = `${process.cwd()}/${selectedFunction.handler.split('.')[0]}`;
