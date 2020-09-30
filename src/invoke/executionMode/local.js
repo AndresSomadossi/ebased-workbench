@@ -1,4 +1,5 @@
 const { getAccountId } = require('../../helper/sts');
+const { printResult } = require('../../helper/cli');
 
 module.exports = async (selectedFunction, data) => {
   const handlerPath = `${process.cwd()}/${selectedFunction.handler.split('.')[0]}`;
@@ -13,12 +14,6 @@ const execute = async (handlerPath, handlerName, data, context) => {
   const handler = require(handlerPath)[handlerName];
   await handler(data, context).then(printResult).catch(printResult);
   // decache(handlerPath);
-}
-
-const printResult = (value) => {
-  console.log('===================================');
-  console.log(value);
-  console.log('===================================');
 }
 
 const getContext = async () => {
