@@ -7,6 +7,8 @@ const excutionMode = {
 };
 const inputMode = {
   invoke: require('./inputMode/invoke'),
+  sqs: require('./inputMode/sqs'),
+  sns: require('./inputMode/sns'),
 };
 
 const serviceFolder = process.cwd();
@@ -66,6 +68,7 @@ function selectSample(samples, sampleName) {
     } else throw new Error(`Invalid sample: ${sampleName}`);
   }
   const { payload = {}, meta = {} } = selectedSample;
+  if (!meta.source) meta.source = 'ebased-workbench';
   if (!meta.trackingTag) meta.trackingTag = `LOCAL-${Date.now()}`;
   return { payload, meta };
 }
