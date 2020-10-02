@@ -6,6 +6,7 @@ const excutionMode = {
   remote: require('./executionMode/remote'),
 };
 const inputMode = {
+  http: require('./inputMode/http'),
   invoke: require('./inputMode/invoke'),
   sqs: require('./inputMode/sqs'),
   sns: require('./inputMode/sns'),
