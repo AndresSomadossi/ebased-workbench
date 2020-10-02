@@ -7,6 +7,7 @@ module.exports = (payload, meta) => {
     
   return {
     headers,
+    pathParameters: {},
     queryStringParameters: {},
     stageVariables: null,
     httpMethod: 'POST',
