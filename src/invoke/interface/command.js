@@ -1,4 +1,5 @@
 const { Command } = require('../../helper/command');
+const cli = require('../../helper/cli');
 const invoke = require('../../invoke/index');
 
 module.exports = {
@@ -28,8 +29,9 @@ module.exports = {
     const { functions } = await invoke.getFunctions(stage);
     const selectedFunction = invoke.selectFunction(functions, functionName);
     const samples = await invoke.getSamples(selectedFunction);
-    const selectedSample = invoke.selectSample(samples, sample);
+    const selectedSample = invoke.selectSample(samples, sample, executionMode);
     const data = invoke.getEventData(selectedFunction, event, selectedSample);
+    cli.printParams(`MODE: ${executionMode} \nFUNCTION: ${selectedFunction.name}\nDATA: ${JSON.stringify(data)}`)
     await invoke.run(executionMode, selectedFunction, data);
   }
 }

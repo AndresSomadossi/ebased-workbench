@@ -1,10 +1,12 @@
+const cli = require('./cli');
+
 class Command {
   constructor(userArgs = [], targetArgs = [], { name, description }) {
     this.userArgs = userArgs;
     this.targetArgs = targetArgs;
-    this.name = `${name} Command`;
+    this.name = name;
     this.description = description;
-    this.printName();
+    cli.printCommandName(name)
     this.isHelpCommand();
   }
   extract() {
@@ -32,11 +34,6 @@ class Command {
       console.log(this.getSyntax());
       process.exit();
     }
-  }
-  printName() {
-    console.log('===================================');
-    console.log(`<< ${this.name} >>`);
-    console.log('===================================');
   }
   getDescripcion() {
     return `\n\t << Description >>

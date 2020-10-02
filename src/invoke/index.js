@@ -11,9 +11,6 @@ const inputMode = {
   sns: require('./inputMode/sns'),
 };
 
-const serviceFolder = process.cwd();
-const sampleFolder = `${serviceFolder}/test/sample`;
-
 module.exports = {
   run,
   getFunctions,
@@ -47,9 +44,12 @@ function selectFunction(functions, functionName) {
   return selectedFunction;
 }
 
-async function getSamples({ aggregate, id }) {
+async function getSamples(selectedFunction) {
   try {
-    const samples = await fs.readJSON(`${sampleFolder}/${aggregate}/${id}.json`);
+    const testFolder = `${process.cwd()}/test`;
+    const handler = selectedFunction.handler.split('/');
+    const file = `${testFolder}/${selectedFunction.aggregate}/sample/${handler[handler.length-1].split('.')[0]}.json`;
+    const samples = await fs.readJSON(file);
     const samplesOps = Object.keys(samples);
     if (samplesOps.length === 0) return {};
     return samples;
@@ -59,7 +59,7 @@ async function getSamples({ aggregate, id }) {
   }
 }
 
-function selectSample(samples, sampleName) {
+function selectSample(samples, sampleName, mode) {
   let selectedSample = samples[sampleName];
   if (!selectedSample) {
     if (sampleName === 'default') {
@@ -69,7 +69,7 @@ function selectSample(samples, sampleName) {
   }
   const { payload = {}, meta = {} } = selectedSample;
   if (!meta.source) meta.source = 'ebased-workbench';
-  if (!meta.trackingTag) meta.trackingTag = `LOCAL-${Date.now()}`;
+  if (!meta.trackingTag) meta.trackingTag = `ebased-${mode}-${Date.now()}`;
   return { payload, meta };
 }
 

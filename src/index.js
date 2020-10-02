@@ -3,6 +3,7 @@
 const version = require('../package.json').version;
 const interfaceCommand = require('./interface/commands');
 const interfaceInteractive = require('./interface/interactive');
+console.clear();
 
 (async () => {
   try {
