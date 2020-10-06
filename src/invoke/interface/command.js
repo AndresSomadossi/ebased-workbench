@@ -32,7 +32,6 @@ module.exports = {
     const selectedSample = invoke.selectSample(samples, sample, executionMode);
     const {selectedEvent, data} = invoke.getEventData(selectedFunction, event, selectedSample);
     cli.printParams(`EXECUTION MODE: ${executionMode} \nINPUT MODE: ${selectedEvent} \nFUNCTION: ${selectedFunction.name}\nDATA: ${JSON.stringify(data)}`);
-    console.log('A', (new Date).toISOString());
     await invoke.run(executionMode, selectedFunction, data);
   }
 }
