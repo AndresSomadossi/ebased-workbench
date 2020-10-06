@@ -7,5 +7,8 @@ module.exports = async (selectedFunction, data) => {
     FunctionName: selectedFunction.name,
     Payload: data,
   };
-  await invoke(params).then(printResult).catch(printResult);
+  await invoke(params).then(printResult).catch(e => {
+    const { message, code, status } = e;
+    printResult({ message, code, status }, 'es ayuda');
+  });
 }

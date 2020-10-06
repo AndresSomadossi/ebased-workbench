@@ -30,8 +30,9 @@ module.exports = {
     const selectedFunction = invoke.selectFunction(functions, functionName);
     const samples = await invoke.getSamples(selectedFunction);
     const selectedSample = invoke.selectSample(samples, sample, executionMode);
-    const data = invoke.getEventData(selectedFunction, event, selectedSample);
-    cli.printParams(`MODE: ${executionMode} \nFUNCTION: ${selectedFunction.name}\nDATA: ${JSON.stringify(data)}`)
+    const {selectedEvent, data} = invoke.getEventData(selectedFunction, event, selectedSample);
+    cli.printParams(`EXECUTION MODE: ${executionMode} \nINPUT MODE: ${selectedEvent} \nFUNCTION: ${selectedFunction.name}\nDATA: ${JSON.stringify(data)}`);
+    console.log('A', (new Date).toISOString());
     await invoke.run(executionMode, selectedFunction, data);
   }
 }

@@ -23,7 +23,7 @@
   "homepage": "https://github.com/AndresSomadossi/ebased-workbench#readme",
   "dependencies": {
     "aws-sdk": "^2.761.0",
-    "ebased": "^1.2.2",
+    "ebased": "^1.4.0",
     "execa": "^4.0.3",
     "fs-extra": "^9.0.1",
     "uuid": "^8.3.0"

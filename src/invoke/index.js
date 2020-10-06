@@ -80,5 +80,5 @@ function getEventData({ events }, eventIndex, { payload, meta }) {
   if (!selectedEvent) throw new Error(`Invalid event: ${eventIndex}`);
   const inputModeSelected = inputMode[selectedEvent];
   if (!inputModeSelected) throw new Error(`Invalid inputMode: ${selectedEvent}`);
-  return inputModeSelected(payload, meta);
+  return { selectedEvent, data: inputModeSelected(payload, meta) };
 }

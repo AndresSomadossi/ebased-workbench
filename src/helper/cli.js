@@ -14,9 +14,13 @@ const printParams = (value) => {
   console.log(value, '\n');
   centerDivisor('EXECUTION LOGS');
 }
-const printResult = (value) => {
+const printResult = (value, help) => {
   centerDivisor('RESULT');
   console.log(value);
+  if(help){
+    lightDivisor();
+    console.log(help);
+  }
   divisor();
 }
 module.exports = {
