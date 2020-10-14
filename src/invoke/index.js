@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const execa = require('execa');
+const uuid = require('uuid');
 
 const excutionMode = {
   local: require('./executionMode/local'),
@@ -69,6 +70,8 @@ function selectSample(samples, sampleName, mode) {
     } else throw new Error(`Invalid sample: ${sampleName}`);
   }
   const { payload = {}, meta = {} } = selectedSample;
+  // Meta injection
+  if (!meta.id) meta.id = uuid.v4();
   if (!meta.source) meta.source = 'ebased-workbench';
   if (!meta.trackingTag) meta.trackingTag = `ebased-${mode}-${Date.now()}`;
   return { payload, meta };
