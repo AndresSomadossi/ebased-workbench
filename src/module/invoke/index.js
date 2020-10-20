@@ -1,6 +1,7 @@
 const fs = require('fs-extra');
 const execa = require('execa');
 const uuid = require('uuid');
+const { config } = require('aws-sdk');
 
 const excutionMode = {
   local: require('./executionMode/local'),
@@ -29,15 +30,24 @@ async function run(mode, selectedFunction, data) {
 }
 
 async function getFunctions(stage) {
-  const { stdout } = await execa.command(`sls print --format json -s ${stage}`).catch(e => { throw new Error(e.stdout) });
-  const { functions } = JSON.parse(stdout);
-  Object.keys(functions).forEach(f => {
-    const splittedHanlder = functions[f].handler.split('/');
-    functions[f].id = f;
-    functions[f].aggregate = (splittedHanlder.length > 2) ? splittedHanlder[1] : null;
-    functions[f].events = [...new Set(functions[f].events.map(evt => Object.keys(evt)).flat())];
-  });
-  return { functions };
+  try {
+    let { stdout } = await execa.command(`sls print --format json -s ${stage}`);
+    if (!stdout.startsWith('{')) stdout = '{' + stdout.split('{').slice(1).join('{');
+    try {
+      const { functions } = JSON.parse(stdout);
+      Object.keys(functions).forEach(f => {
+        const splittedHanlder = functions[f].handler.split('/');
+        functions[f].id = f;
+        functions[f].aggregate = (splittedHanlder.length > 2) ? splittedHanlder[1] : null;
+        functions[f].events = [...new Set(functions[f].events.map(evt => Object.keys(evt)).flat())];
+      });
+      return { functions };
+    } catch (error) {
+      throw stdout;
+    }
+  } catch (error) {
+    throw new Error(`INVALID SERVERLESS.YML \n ${error}`)
+  }
 }
 
 function selectFunction(functions, functionName) {

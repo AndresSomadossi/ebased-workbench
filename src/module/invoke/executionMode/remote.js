@@ -1,6 +1,6 @@
 process.env.IS_LOCAL = 'true';
 const { invoke } = require('ebased/service/downstream/lambda');
-const { printResult } = require('../../helper/cli');
+const { printResult } = require('../../../helper/cli');
 
 module.exports = async (selectedFunction, data) => {
   const params = {

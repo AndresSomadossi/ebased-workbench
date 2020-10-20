@@ -1,3 +1,3 @@
-module.exports = () => {
-  console.log('INTERACTIVE MODE');
+module.exports = {
+  start: () => console.log('INTERACTIVE MODE COMMING SOON!')
 }

@@ -1,5 +1,3 @@
-const uuid = require('uuid');
-
 module.exports = (payload, meta) => {
   const headers = meta;
   Object.keys(headers).forEach(p =>

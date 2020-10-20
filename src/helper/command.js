@@ -15,11 +15,15 @@ class Command {
       this.targetArgs.forEach(tagetArg => {
         tagetArg.names.forEach(name => {
           const index = this.userArgs.indexOf(name);
-          if (index > -1) tagetArg.value = this.userArgs[index + 1];
+          if (index > -1) {
+            if (tagetArg.checkPresent) tagetArg.value = true;
+            else tagetArg.value = this.userArgs[index + 1];
+          };
         });
         if (tagetArg.value === undefined) {
           if (tagetArg.required) throw new Error(`Missing required property '${tagetArg.key}'`);
-          tagetArg.value = tagetArg.default;
+          else if (tagetArg.default !== undefined) tagetArg.value = tagetArg.default;
+          else tagetArg.value = false;
         }
         values[tagetArg.key] = tagetArg.value;
       })
@@ -41,7 +45,7 @@ class Command {
   }
   getSyntax() {
     return `\t << Syntax >>
-    ${this.targetArgs.map(arg => `\n - ${arg.key}: [${arg.names}] (${(arg.required) ? 'REQUIRED' : 'DEFAULT: '+arg.default})`)}`
+    ${this.targetArgs.map(arg => `\n - ${arg.key}: [${arg.names}] (${(arg.required) ? 'REQUIRED' : 'DEFAULT: '+(arg.default||'-')})`)}`
   }
 }
 

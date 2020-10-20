@@ -1,5 +1,5 @@
-const { Command } = require('../../helper/command');
-const cli = require('../../helper/cli');
+const { Command } = require('../../../helper/command');
+const cli = require('../../../helper/cli');
 const invoke = require('../../invoke/index');
 
 module.exports = {

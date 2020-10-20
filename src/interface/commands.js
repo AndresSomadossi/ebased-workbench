@@ -1,3 +1,4 @@
 module.exports = {
-  invoke: require('../invoke/interface/command').invoke,
+  invoke: require('../module/invoke/interface/command').invoke,
+  config: require('../module/config/interface/command').config,
 }

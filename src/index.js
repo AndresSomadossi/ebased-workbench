@@ -9,7 +9,7 @@ console.clear();
   try {
     const args = process.argv.slice(2);
     // Help command
-    if (args[0] && args[0].endsWith('help')) help();
+    if (args[0] && (args[0].endsWith('help') || args[0] === '-h')) help();
     // Command mode
     if (args.length > 0) {
       const cmd = interfaceCommand[args.shift()];
@@ -17,7 +17,7 @@ console.clear();
       await cmd(args);
     }
     // Interactive mode
-    else interfaceInteractive();
+    else interfaceInteractive.start();
 
   } catch (error) {
     console.log('===================================');
