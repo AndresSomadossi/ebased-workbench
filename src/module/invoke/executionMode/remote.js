@@ -1,14 +1,13 @@
-process.env.IS_LOCAL = 'true';
-const { invoke } = require('ebased/service/downstream/lambda');
+const Lambda = require('aws-sdk/clients/lambda');
+const lambda = new Lambda();
 const { printResult } = require('../../../helper/cli');
 
 module.exports = async (selectedFunction, data) => {
   const params = {
     FunctionName: selectedFunction.name,
-    Payload: data,
+    Payload: JSON.stringify(data),
   };
-  await invoke(params).then(printResult).catch(e => {
-    const { message, code, status } = e;
-    printResult({ message, code, status }, 'es ayuda');
+  await lambda.invoke(params).promise().then(printResult).catch(e => {
+    printResult(e);
   });
 }
