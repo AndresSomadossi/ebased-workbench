@@ -23,10 +23,10 @@ module.exports = {
   getEventData,
 }
 
-async function run(mode, selectedFunction, data) {
+async function run(mode, selectedFunction, data, globalEnvVars) {
   const excutionModeSelected = excutionMode[mode];
   if (!excutionModeSelected) throw new Error(`Invalid mode: ${mode}`);
-  await excutionModeSelected(selectedFunction, data);
+  await excutionModeSelected(selectedFunction, data, globalEnvVars);
 }
 
 async function getFunctions(stage) {
@@ -34,14 +34,14 @@ async function getFunctions(stage) {
     let { stdout } = await execa.command(`sls print --format json -s ${stage}`);
     if (!stdout.startsWith('{')) stdout = '{' + stdout.split('{').slice(1).join('{');
     try {
-      const { functions } = JSON.parse(stdout);
+      const { functions, provider: { environment } } = JSON.parse(stdout);
       Object.keys(functions).forEach(f => {
         const splittedHanlder = functions[f].handler.split('/');
         functions[f].id = f;
         functions[f].aggregate = (splittedHanlder.length > 2) ? splittedHanlder[1] : null;
         functions[f].events = [...new Set(functions[f].events.map(evt => Object.keys(evt)).flat())];
       });
-      return { functions };
+      return { functions, environment };
     } catch (error) {
       throw stdout;
     }
@@ -60,7 +60,8 @@ async function getSamples(selectedFunction) {
   try {
     const testFolder = `${process.cwd()}/test`;
     const handler = selectedFunction.handler.split('/');
-    const file = `${testFolder}/${selectedFunction.aggregate}/sample/${handler[handler.length-1].split('.')[0]}.json`;
+    const subpath = (selectedFunction.aggregate) ? `/${selectedFunction.aggregate}` : '';
+    const file = `${testFolder}${subpath}/sample/${handler[handler.length-1].split('.')[0]}.json`;
     const samples = await fs.readJSON(file);
     const samplesOps = Object.keys(samples);
     if (samplesOps.length === 0) return {};

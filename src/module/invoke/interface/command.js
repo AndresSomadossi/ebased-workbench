@@ -26,12 +26,12 @@ module.exports = {
     });
     const { functionName, executionMode, sample, event, stage } = cmd.extract();
 
-    const { functions } = await invoke.getFunctions(stage);
+    const { functions, environment } = await invoke.getFunctions(stage);
     const selectedFunction = invoke.selectFunction(functions, functionName);
     const samples = await invoke.getSamples(selectedFunction);
     const selectedSample = invoke.selectSample(samples, sample, executionMode);
-    const {selectedEvent, data} = invoke.getEventData(selectedFunction, event, selectedSample);
+    const { selectedEvent, data } = invoke.getEventData(selectedFunction, event, selectedSample);
     cli.printParams(`EXECUTION MODE: ${executionMode} \nINPUT MODE: ${selectedEvent} \nFUNCTION: ${selectedFunction.name}\nDATA: ${JSON.stringify(data)}`);
-    await invoke.run(executionMode, selectedFunction, data);
+    await invoke.run(executionMode, selectedFunction, data, environment);
   }
 }
